@@ -347,7 +347,12 @@ public class RunningMan extends ProjectorTrainingExerciseBase implements Trainin
 				} else if ("obstacle".equals(hitRegion.getTag("subtarget"))) {
 					TextToSpeech.say(String.format("Your score was %d", score));
 					score = 0;
-					initTargets();
+					
+					if (Platform.isFxApplicationThread()) {
+						initTargets();
+					} else {
+						Platform.runLater(() -> initTargets());
+					}
 				}
 				
 				showTextOnFeed(String.format("Score: %d", score));
